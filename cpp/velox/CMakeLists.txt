@@ -122,8 +122,7 @@ macro(find_gcssdk)
 endmacro()
 
 macro(find_avro)
-  find_package(unofficial-avro-cpp CONFIG REQUIRED)
-  add_library(AvroCpp::avrocpp ALIAS unofficial::avro-cpp::avrocpp)
+  find_package(AvroCpp CONFIG REQUIRED)
 endmacro()
 
 macro(find_azure)
