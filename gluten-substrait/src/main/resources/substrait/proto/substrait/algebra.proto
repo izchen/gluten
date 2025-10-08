@@ -166,6 +166,7 @@ message ReadRel {
         uint64 max_block_size = 1;
         NamedStruct schema = 2 [deprecated=true];
       }
+      message AvroReadOptions {}
       message IcebergReadOptions {
         enum FileContent {
           DATA = 0;
@@ -209,6 +210,7 @@ message ReadRel {
         TextReadOptions text = 14;
         JsonReadOptions json = 15;
         IcebergReadOptions iceberg = 16;
+        AvroReadOptions avro = 999;
       }
 
       message partitionColumn {

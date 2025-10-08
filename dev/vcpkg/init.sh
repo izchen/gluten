@@ -7,6 +7,7 @@ ENABLE_S3=OFF
 ENABLE_GCS=OFF
 ENABLE_HDFS=OFF
 ENABLE_ABFS=OFF
+ENABLE_AVRO=OFF
 
 for arg in "$@"; do
   case $arg in
@@ -28,6 +29,10 @@ for arg in "$@"; do
     ;;
   --enable_abfs=*)
     ENABLE_ABFS=("${arg#*=}")
+    shift # Remove argument name from processing
+    ;;
+  --enable_avro=*)
+    ENABLE_AVRO=("${arg#*=}")
     shift # Remove argument name from processing
     ;;
   *)
@@ -73,7 +78,9 @@ fi
 if [ "$ENABLE_ABFS" = "ON" ]; then
   EXTRA_FEATURES+="--x-feature=velox-abfs"
 fi
-
+if [ "$ENABLE_AVRO" = "ON" ]; then
+  EXTRA_FEATURES+="--x-feature=velox-avro "
+fi
 
 $VCPKG install --no-print-usage \
     --triplet="${VCPKG_TRIPLET}" --host-triplet="${VCPKG_TRIPLET}" ${EXTRA_FEATURES}

@@ -52,6 +52,7 @@ public class LocalFilesNode implements SplitInfo {
     TextReadFormat(),
     JsonReadFormat(),
     KafkaReadFormat(),
+    AvroReadFormat(),
     UnknownFormat()
   }
 
@@ -254,6 +255,11 @@ public class LocalFilesNode implements SplitInfo {
                   .setMaxBlockSize(GlutenConfig.get().textInputMaxBlockSize())
                   .build();
           fileBuilder.setJson(jsonReadOptions);
+          break;
+        case AvroReadFormat:
+          ReadRel.LocalFiles.FileOrFiles.AvroReadOptions avroReadOptions =
+              ReadRel.LocalFiles.FileOrFiles.AvroReadOptions.newBuilder().build();
+          fileBuilder.setAvro(avroReadOptions);
           break;
         default:
           break;

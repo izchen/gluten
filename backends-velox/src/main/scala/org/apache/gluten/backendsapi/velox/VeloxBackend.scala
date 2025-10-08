@@ -29,7 +29,7 @@ import org.apache.gluten.extension.columnar.transition.{Convention, ConventionFu
 import org.apache.gluten.sql.shims.SparkShimLoader
 import org.apache.gluten.substrait.rel.LocalFilesNode
 import org.apache.gluten.substrait.rel.LocalFilesNode.ReadFileFormat
-import org.apache.gluten.substrait.rel.LocalFilesNode.ReadFileFormat.{DwrfReadFormat, OrcReadFormat, ParquetReadFormat}
+import org.apache.gluten.substrait.rel.LocalFilesNode.ReadFileFormat.{AvroReadFormat, DwrfReadFormat, OrcReadFormat, ParquetReadFormat}
 import org.apache.gluten.utils._
 
 import org.apache.spark.sql.catalyst.catalog.BucketSpec
@@ -148,6 +148,7 @@ object VeloxBackendSettings extends BackendSettingsApi {
             None
           }
         case DwrfReadFormat => None
+        case AvroReadFormat => None
         case OrcReadFormat =>
           if (!VeloxConfig.get.veloxOrcScanEnabled) {
             Some(s"Velox ORC scan is turned off, ${VeloxConfig.VELOX_ORC_SCAN_ENABLED.key}")
@@ -226,6 +227,7 @@ object VeloxBackendSettings extends BackendSettingsApi {
       case "ParquetFileFormat" => ReadFileFormat.ParquetReadFormat
       case "DwrfFileFormat" => ReadFileFormat.DwrfReadFormat
       case "CSVFileFormat" => ReadFileFormat.TextReadFormat
+      case "AvroFileFormat" => ReadFileFormat.AvroReadFormat
       case _ => ReadFileFormat.UnknownFormat
     }
   }

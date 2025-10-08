@@ -110,6 +110,8 @@ case class HiveTableScanExecTransformer(
       case Some(inputFormat)
           if PARQUET_INPUT_FORMAT_CLASS.isAssignableFrom(Utils.classForName(inputFormat)) =>
         ReadFileFormat.ParquetReadFormat
+      case Some("org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat") =>
+        ReadFileFormat.AvroReadFormat
       case _ => ReadFileFormat.UnknownFormat
     }
   }

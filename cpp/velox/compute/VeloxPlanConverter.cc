@@ -88,6 +88,9 @@ std::shared_ptr<SplitInfo> parseScanSplitInfo(
       case SubstraitFileFormatCase::kParquet:
         splitInfo->format = dwio::common::FileFormat::PARQUET;
         break;
+      case SubstraitFileFormatCase::kAvro:
+        splitInfo->format = dwio::common::FileFormat::AVRO;
+        break;
       case SubstraitFileFormatCase::kText:
         splitInfo->format = dwio::common::FileFormat::TEXT;
         break;
