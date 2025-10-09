@@ -182,7 +182,7 @@ void VeloxBackend::init(
   velox::parquet::registerParquetReaderFactory();
   velox::parquet::registerParquetWriterFactory();
   velox::orc::registerOrcReaderFactory();
-  velox::dwio::avro::registerAvroReaderFactory();
+  velox::avro::registerAvroReaderFactory();
   velox::exec::ExprToSubfieldFilterParser::registerParserFactory(
       []() { return std::make_shared<SparkExprToSubfieldFilterParser>(); });
 

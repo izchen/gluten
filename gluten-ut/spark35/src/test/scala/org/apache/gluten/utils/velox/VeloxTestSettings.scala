@@ -20,6 +20,7 @@ import org.apache.gluten.utils.{BackendTestSettings, SQLQueryTestSettings}
 
 import org.apache.spark.GlutenSortShuffleSuite
 import org.apache.spark.sql._
+import org.apache.spark.sql.avro._
 import org.apache.spark.sql.catalyst.expressions._
 import org.apache.spark.sql.connector._
 import org.apache.spark.sql.errors.{GlutenQueryCompilationErrorsDSv2Suite, GlutenQueryCompilationErrorsSuite, GlutenQueryExecutionErrorsSuite, GlutenQueryParsingErrorsSuite}
@@ -223,6 +224,8 @@ class VeloxTestSettings extends BackendTestSettings {
   enableSuite[GlutenBinaryFileFormatSuite]
     // Exception.
     .exclude("column pruning - non-readable file")
+  enableSuite[GlutenAvroSuite]
+  enableSuite[GlutenAvroV1Suite]
   enableSuite[GlutenCSVv1Suite]
     // file cars.csv include null string, Arrow not support to read
     .exclude("DDL test with schema")

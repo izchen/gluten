@@ -122,7 +122,7 @@ macro(find_gcssdk)
 endmacro()
 
 macro(find_avro)
-  find_package(AvroCpp CONFIG REQUIRED)
+  find_package(AvroCpp REQUIRED)
 endmacro()
 
 macro(find_azure)

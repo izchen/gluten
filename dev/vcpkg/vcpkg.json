@@ -60,7 +60,8 @@
       "dependencies": [
         {
           "name": "avro-cpp",
-          "version>=": "1.12.0"
+          "version>=": "1.12.0",
+          "features": ["snappy"]
         }
       ]
     },
