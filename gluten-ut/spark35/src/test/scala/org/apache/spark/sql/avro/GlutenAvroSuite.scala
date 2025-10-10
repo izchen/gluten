@@ -19,10 +19,14 @@ package org.apache.spark.sql.avro
 import org.apache.gluten.execution.{BatchScanExecTransformer, FileSourceScanExecTransformer}
 
 import org.apache.spark.sql.GlutenSQLTestsBaseTrait
+import org.apache.spark.sql.avro.GlutenAvroTestBase._
 import org.apache.spark.sql.execution.FileSourceScanExec
 import org.apache.spark.sql.execution.datasources.v2.BatchScanExec
 
 import java.io.File
+import java.nio.file.{Files, Path, StandardCopyOption}
+import scala.collection.mutable
+import scala.util.Using
 
 /**
  * Gluten wrapper suites for Spark Avro module unit tests.
@@ -32,6 +36,13 @@ import java.io.File
  * columnar backend.
  */
 class GlutenAvroSuite extends AvroSuite with GlutenSQLTestsBaseTrait {
+
+  test("native") {
+    val df = spark.read.format("avro").load("file:///tmp/gluten-avro-resources14680778583777658194/episodes.avro")
+//    val executedPlans = getExecutedPlan(df)
+    df.show
+    df.count()
+  }
 
   test("native avro scan") {
     withTempPath { tempDir =>
@@ -58,7 +69,42 @@ class GlutenAvroSuite extends AvroSuite with GlutenSQLTestsBaseTrait {
   }
 }
 
-class GlutenAvroV1Suite extends AvroV1Suite with GlutenSQLTestsBaseTrait
+class GlutenAvroV1Suite extends AvroV1Suite with GlutenAvroTestBase
 
-//class GlutenAvroV2Suite extends AvroV2Suite with GlutenSQLTestsBaseTrait
+//class GlutenAvroV2Suite extends AvroV2Suite with GlutenAvroTestBase
+
+trait GlutenAvroTestBase extends GlutenSQLTestsBaseTrait {
+  override protected def testFile(testResource: String): String = {
+    extractedResources.getOrElseUpdate(testResource, copyToDisk(testResource))
+  }
+}
+
+object GlutenAvroTestBase {
+  private val extractedResources = mutable.Map.empty[String, String]
+  private val tempDir: Path = {
+    val dir = Files.createTempDirectory("gluten-avro-resources")
+//    dir.toFile.deleteOnExit()
+    dir
+  }
+
+  private def copyToDisk(resource: String): String = {
+    require(resource.nonEmpty, "Resource name cannot be empty")
+    val stream = Option(Thread.currentThread().getContextClassLoader.getResourceAsStream(resource))
+      .orElse(Option(getClass.getClassLoader.getResourceAsStream(resource)))
+      .getOrElse(throw new IllegalArgumentException(s"Resource $resource not found on classpath"))
+
+    val target = tempDir.resolve(resource)
+    val parent = target.getParent
+    if (parent != null) {
+      Files.createDirectories(parent)
+    }
+
+    Using.resource(stream) { inputStream =>
+      Files.copy(inputStream, target, StandardCopyOption.REPLACE_EXISTING)
+    }
+
+//    target.toFile.deleteOnExit()
+    target.toFile.getCanonicalPath
+  }
+}
 

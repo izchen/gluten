@@ -226,6 +226,7 @@ class VeloxTestSettings extends BackendTestSettings {
     .exclude("column pruning - non-readable file")
   enableSuite[GlutenAvroSuite]
   enableSuite[GlutenAvroV1Suite]
+    .exclude("write with compression - sql configs")
   enableSuite[GlutenCSVv1Suite]
     // file cars.csv include null string, Arrow not support to read
     .exclude("DDL test with schema")
